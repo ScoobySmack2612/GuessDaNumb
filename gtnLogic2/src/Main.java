@@ -13,16 +13,16 @@ public class Main {
             if (play == true) {
                 //start Logic
                 int theNumb = getTheNumb();
-                System.out.println(theNumb);
+                System.out.println("Pick a number between 0 and 50");
                 for (int guesses = 0; guesses <= 5; guesses++) {
                     //Call user input method
                     int userGuess = getIn();
                     //compare userGuess and range of theNumb
                     String checked = rangeCheck(userGuess, theNumb);
-                    if (guesses == 4 && checked.contains("Congratulations")) {
+                    if (guesses == 5 && checked.contains("Congratulations")) {
                         System.out.println(checked);
                         break;
-                    } else if (guesses == 4 && checked.contains("low") || guesses == 5 && checked.contains("high") || guesses == 5 && checked.contains("range")) {
+                    } else if (guesses == 5 && checked.contains("low") || guesses == 5 && checked.contains("high") || guesses == 5 && checked.contains("range")) {
                         System.out.println("Im sorry you lost :'( but don't give up! try again!");
                         break;
                     } else {
@@ -47,7 +47,7 @@ public class Main {
         Boolean run = true;
         Boolean play;
         while(run){
-            String ask = "Would you like to play Guess the Number? Y/N?";
+            String ask = "Would you like to play Guess the Number? y/n?";
             System.out.println(ask);
 
             Scanner scan = new Scanner(System.in);

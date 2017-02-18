@@ -8,54 +8,78 @@ import java.util.StringJoiner;
 
 class Main
     {
-
-        public static void main(String[] args)
-        {
-            int lives = 5;
-            String gtn = "Wanna play a Game? Im thinking Guess the Number... y/n:";
+        public static void main(String[] args) {
+            Scanner scan = new Scanner(System.in);
             Scanner scanInput = new Scanner(System.in);
-            System.out.println(gtn);
-            String play = scanInput.nextLine();
+            Boolean run = true;
 
-            while(play.equals("y"))
-            {
-                Random rand = new Random();
-                int chosen = rand.nextInt(51);
-                int userGuess = Integer.parseInt(scanInput.nextLine());
-                String numberComp = compInt(userGuess, chosen);
+            while (run) {
+                String gtn = "Wanna play a Game? Im thinking Guess the Number... y/n:";
+                System.out.println(gtn);
 
+                String play = scanInput.nextLine();
 
-                for(lives = 4; lives>=0; lives-=1) {
-                    if(lives == 0 && numberComp.equals("Winner!")){
-                        System.out.println("Won on fifth try");
-                    }
-                    else if(lives ==0 && !numberComp.equals("Winner")){
-                        break;
-                    }
-                    else {
-                        if (numberComp.equals("Winner!")) {
-                            System.out.println(numberComp);
-                            break;
-                        } else {
+                Boolean letsPlay;
+                Boolean deciding = true;
 
-                            System.out.println("Sorry, but that answer was" + numberComp + " you have " + lives + " lives left.");
-                            userGuess = Integer.parseInt(scanInput.nextLine());
-                            numberComp = compInt(userGuess, chosen);
+                while (deciding) {
+                    if (play.equals("y")) {
+                        letsPlay = true;
+
+                        Random rand = new Random();
+                        int chosen;
+                        chosen = rand.nextInt(51);
+                        while (letsPlay) {
+                            int lives;
+                            int userGuess;
+                            String numberComp;
+                            try {
+                                System.out.println("Please enter number from 0 to 50. you have 5 guesses.");
+                                userGuess = Integer.parseInt(scan.nextLine());
+
+                                System.out.println("Youre playing");
+
+                                System.out.println("you chose: " + userGuess);
+
+                                numberComp = compInt(userGuess, chosen);
+
+                                for (lives = 5; lives >= 0; lives -= 1) {
+                                    if (lives == 0 && numberComp.equals("Winner!")) {
+                                        System.out.println("Won on fifth try");
+                                    } else if (lives == 0 && !numberComp.equals("Winner")) {
+                                        System.out.println("You lost... But don't give up! Try Again!");
+                                        break;
+                                    } else {
+                                        if (numberComp.equals("Winner!")) {
+                                            System.out.println(numberComp);
+                                            break;
+                                        } else {
+
+                                            System.out.println("Sorry, but that answer was" + numberComp + " you have " + lives + " lives left.");
+                                            userGuess = Integer.parseInt(scan.nextLine());
+                                            numberComp = compInt(userGuess, chosen);
+                                        }
+                                    }
+                                }
+
+                            } catch (NumberFormatException e) {
+                                System.out.println("Please enter integer");
+
+                            }
                         }
+                        break;
+                    } else if (play.equals("n")) {
+                        break;
+                    } else {
+                        System.out.println("Sorry please enter valid input");
                     }
                 }
 
-                System.out.println(gtn);
-                play = scanInput.nextLine();
-            }
-            if(play.equals("n"))
-            {
-                System.out.println("You chose to not play the game :'(");
+                System.out.println("You chose not to play :'(");
             }
         }
 
-        static String compInt(int userGuess, int chosen){
-
+        private static String compInt(int userGuess, int chosen){
             String numberComp;
             numberComp = "";
 
@@ -76,7 +100,6 @@ class Main
                     numberComp = " too low";
                 }
             }
-
             return numberComp;
         }
     }
