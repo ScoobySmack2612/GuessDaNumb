@@ -13,7 +13,6 @@ public class Main {
             if (play == true) {
                 //start Logic
                 int theNumb = getTheNumb();
-                System.out.println(theNumb);
                 System.out.println("Pick a number between 0 and 50.");
                 for (int guesses = 0; guesses < 5; guesses++) {
                     //Call user input method
