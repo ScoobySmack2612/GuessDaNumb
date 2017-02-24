@@ -5,7 +5,7 @@
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
+import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -14,6 +14,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import jdk.nashorn.internal.runtime.regexp.joni.constants.StackPopLevel;
 import java.util.Random;
+import java.util.ArrayList;
 
 public class Main extends Application {
 
@@ -38,32 +39,47 @@ public class Main extends Application {
         Label welcome = new Label("Welcome to Guess the Number!!");
         Label start = new Label("Click below to start");
 
+        ArrayList<String> answers = new ArrayList<String>();
 
         button = new Button("Click Me");
         button.setOnAction(e -> {
             Random rand = new Random();
             chosen = rand.nextInt(51);
-            System.out.println("The number is " + chosen + " Guesses equals zero");
             window.setScene(game1);
         });
 
-        VBox menu1 = new VBox(150);
-        menu1.getChildren().addAll(welcome, start);
+        quit = new Button("Abort!");
+        quit.setOnAction(e -> {
+            window.close();
+        });
 
-        StackPane menu2 = new StackPane();
-        menu2.getChildren().add(button);
+        VBox menu1 = new VBox(10);
+        menu1.setPadding(new Insets(15));
+        menu1.getChildren().addAll(welcome, start);
+        menu1.setAlignment(Pos.CENTER);
+
+        VBox menu2 = new VBox(20);
+        menu2.getChildren().addAll(button,quit);
+        menu2.setAlignment(Pos.CENTER);
+        menu2.setPadding(new Insets(0,0,100,0));
 
         BorderPane grandeScheme = new BorderPane();
-        grandeScheme.setTop(menu1);
-        grandeScheme.setCenter(menu2);
+        grandeScheme.setCenter(menu1);
+        grandeScheme.setBottom(menu2);
 
         menu = new Scene(grandeScheme, 450, 400);
-        menu1.setAlignment(Pos.CENTER);
 
 
         //scene 2 - Game1
+        Label howToPlay = new Label("Pick a number between 0 and 50... You have 5 guesses, Choose wisely ;)");
         Label gameText = new Label("Enter a number!");
         TextField userIn = new TextField();
+
+        Label result = new Label("");
+
+        Label userAnswers = new Label("Your Guesses:");
+        Label showAnswers = new Label("");
+
         gameButton = new Button("Submit");
         gameButton.setOnAction(e -> {
             if (guesses <=4) {
@@ -72,29 +88,55 @@ public class Main extends Application {
                     guesses++;
                     String numberComp = compInt(userGuess, chosen);
                     userIn.clear();
-                    System.out.println(numberComp);
 
                     if (numberComp.contains("Winner!")) {
                         guesses = 0;
+                        answers.clear();
+                        showAnswers.setText("");
+                        result.setText("");
                         window.setScene(wonGame);
                     } else if (guesses == 5 && numberComp.contains("Winner!")){
                         guesses = 0;
+                        answers.clear();
+                        showAnswers.setText("");
+                        result.setText("");
                         window.setScene(wonGame);
                     } else if(guesses==5 && !numberComp.contains("Winner!")) {
                         guesses = 0;
+                        answers.clear();
+                        showAnswers.setText("");
+                        result.setText("");
                         window.setScene(lostGame);
+                    }else {
+                        String convertToString = Integer.toString(userGuess);
+                        answers.add(convertToString);
+
+                        String toDisplay = String.join(", ", answers);
+
+                        showAnswers.setText(toDisplay);
+
+                        String setResult = ("Oh I'm sorry" + numberComp);
+                        result.setText(setResult);
                     }
                 } catch (NumberFormatException exception) {
-                    System.out.println("Please enter integer!! I wont count that as a guess");
+                    result.setText("Please enter integer!! I wont count that as a guess");
                     userIn.clear();
                 }
             }
         });
 
+        VBox guessesTxt = new VBox(20);
+        guessesTxt.getChildren().addAll(userAnswers,showAnswers);
+
         VBox layout2 = new VBox(20);
-        layout2.getChildren().addAll(gameText, userIn, gameButton);
+        layout2.getChildren().addAll(howToPlay,gameText, result, userIn, gameButton);
         layout2.setAlignment(Pos.CENTER);
-        game1 = new Scene(layout2, 450, 400);
+
+        BorderPane grandeGameScheme = new BorderPane();
+        grandeGameScheme.setCenter(layout2);
+        grandeGameScheme.setBottom(guessesTxt);
+
+        game1 = new Scene(grandeGameScheme, 450, 400);
 
         //Scene 3 - wonGame
         Label resultTxt = new Label("You Won Congratulations!!!");
@@ -105,7 +147,10 @@ public class Main extends Application {
         restart.setOnAction(e -> {
             window.setScene(menu);
         });
-        quit = new Button("Nah, I'm Lame and just want to go...");
+        quit = new Button("Nah, I want to leave");
+        quit.setOnAction(e -> {
+            window.close();
+        });
 
         //wonGame layout
         //Text in layout will be vertical and centered messages
@@ -127,13 +172,17 @@ public class Main extends Application {
 
 
         //Scene 4 - lostGame
-        Label resultTxt2 = new Label("I'm Sorry but you failed to guess the Correct number..");
-        Label DGU = new Label("But don't give upp I believe in you!!");
+        Label resultTxt2 = new Label("I'm Sorry, but you failed to guess the correct number..");
+        Label DGU = new Label("But don't give up I believe in you!!");
 
         //lostGame buttons(s)
         restart = new Button("I'm Cool and I want to try again");
         restart.setOnAction(e -> {
             window.setScene(menu);
+        });
+        quit = new Button("Nah, I want to leave");
+        quit.setOnAction(e -> {
+            window.close();
         });
 
         //lostGame layout
@@ -146,6 +195,7 @@ public class Main extends Application {
         HBox l4Btns = new HBox(20);
         l4Btns.getChildren().addAll(restart,quit);
         l4Btns.setAlignment(Pos.CENTER);
+
 
         //combine layouts
         BorderPane grandeScheme3 = new BorderPane();
