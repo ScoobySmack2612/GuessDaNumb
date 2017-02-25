@@ -12,7 +12,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import jdk.nashorn.internal.runtime.regexp.joni.constants.StackPopLevel;
 import java.util.Random;
 import java.util.ArrayList;
 
@@ -23,8 +22,6 @@ public class Main extends Application {
     Button button, gameButton, restart, quit;
     int guesses = 0;
     int chosen;
-    int userGuess;
-    String endMsg;
     String againTxt = "Let's play Again!";
 
     public static void main(String[] args) {
@@ -41,7 +38,7 @@ public class Main extends Application {
 
         ArrayList<String> answers = new ArrayList<String>();
 
-        button = new Button("Click Me");
+        button = new Button("Lets Go!");
         button.setOnAction(e -> {
             Random rand = new Random();
             chosen = rand.nextInt(51);
